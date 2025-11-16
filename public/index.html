@@ -9,7 +9,11 @@
     <style>
         /* Set the backdrop image for the whole page */
         body {
+<<<<<<< HEAD
             font-family: 'Times New Roman', sans-serif;
+=======
+            font-family:  'Courier New', monospace, sans-serif;
+>>>>>>> srishty
             background-image: url('/images/backdrop.png');
             background-size: cover; /* ESSENTIAL for zoom/fill */
             background-position: center;
@@ -21,11 +25,19 @@
         
         /* The "purple box" game panel */
         #gamePanel {
+<<<<<<< HEAD
             background-color: #6182BD; /* Melanie pink-700 */
             border: 8px solid #DAD5D2; /* Yellow-400 */
             border-radius: 10px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
             --inner-bg: #6182BD; /* Purple-950 */
+=======
+        background-color: #6182BD; /* Melanie pink-700 */
+        border: 8px solid #DAD5D2; /* Yellow-400 */
+        border-radius: 10px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        --inner-bg: #6182BD; /* Purple-950 */
+>>>>>>> srishty
         }
         
         .game-view { display: none; }
@@ -89,6 +101,7 @@
     <div class="w-full max-w-7xl grid grid-cols-1 md:grid-cols-5 gap-8 ml-auto ">        <!--     LEFT SIDE: "THE SCENE"         -->
         <!-- ********************************** -->
         <!-- UPDATED: Scene is now col-span-2 (40%) -->
+<<<<<<< HEAD
         <div class="md:col-span-2 h-full relative flex justify-center">            
             <img id="gateImage" src="/images/Gates/main gate.png" alt="Castle Gate" 
                 class="absolute bottom-[-69%] max-w-xl left-[-40%] transform -translate-x-0" style="z-index: 10;">            
@@ -99,6 +112,19 @@
                  class="absolute w-[200px] h-auto" 
                  style="z-index:30; right:25%; bottom:-70%;">
         </div>
+=======
+    <div class="md:col-span-2 h-full relative flex justify-center">
+        <img id="gateImage" src="/images/Gates/main gate.png"
+            class="fixed left-[120px] bottom-[83px] w-[500px] z-10">
+            <img id="ghostImage" src="/images/Ghosts/ghost 1.png"
+            class="fixed left-[280px] top-[300px] w-[200px] z-20">
+
+            <img id="spiderImage"
+            src="/images/Spiders/spider.png"
+            class="absolute right-[150px] bottom-[300px] w[200px] z-30 translate-x-[300px]">
+            </div>
+        
+>>>>>>> srishty
 
         <!-- ********************************** -->
         <!--   RIGHT SIDE: "THE GAME PANEL"     -->
