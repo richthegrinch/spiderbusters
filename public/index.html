@@ -67,15 +67,15 @@
         /* --- Card Styles --- */
         .card {
             transition: all 0.2s ease-in-out;
-            border: 2px solid #a855f7; /* Purple-500 */
+            border: 2px solid #292542; /* Purple-500 */
             background-color: #4a044e99; /* Purple-950 with alpha */
         }
         .card:hover {
             transform: translateY(-5px);
-            border-color: #fde047; /* Yellow-400 */
+            border-color: #292542; /* Yellow-400 */
         }
         .card.selected {
-            border-color: #fde047; /* Yellow-400 */
+            border-color: #292542; /* Yellow-400 */
             background-color: #fde04733; /* Yellow-400 with alpha */
             transform: translateY(-5px);
         }
@@ -92,13 +92,22 @@
             50% { transform: translateY(-15px); }
         }
         #ghostImage {
-            animation: bob 3s ease-in-out infinite;
+            animation: bob 4s ease-in-out infinite;
             filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.7));
         }
 
-        @keyframes spider-enter {
-            from { opacity: 0; transform: translateY(50px); }
-            to { opacity: 1; transform: translateY(0); }
+        @keyframes slide-wiggle-in {
+            0% {
+                opacity: 0;
+                transform: translateX(100px) rotate(0deg);
+            }
+            50% {
+                opacity: 1;
+                transform: translateX(10px) rotate(2deg);
+            }
+            100% {
+                transform: translateX(0) rotate(-1deg);
+            }
         }
         /* Spider entry: travel from right edge to gate area with a wiggle */
         @keyframes spider-slide {
@@ -157,7 +166,7 @@
             <!-- Characters are in a separate absolute layer so they don't move with the gate -->
             <div id="characterLayer" class="absolute inset-0 z-20 pointer-events-none">
                 <img id="ghostImage" src="/images/Ghosts/ghost 1.png" alt="Ghost" 
-                    class="w-[350px]" style="position:fixed; z-index:20; left:11%; top:32%; transform:translateX(-50%);">
+                    class="w-[350px]" style="position:fixed; z-index:20; left:11%; top:36%; transform:translateX(-50%);">
 
                 <!-- Spider container: container handles horizontal slide, inner centers image -->
                 <div id="spiderContainer" style="position:fixed; left:5%; bottom:40px; z-index:60; transform: translateX(100vw);">
@@ -240,20 +249,20 @@
                         <button id="swapButton" class="px-4 py-1 bg-purple-600 text-white text-xs font-medium rounded-lg hover:bg-gray-500">Swap Cards</button>
                     </div>
                     <div id="keywordInputArea" class="hidden my-2">
-                        <label for="keywordInput" class="block text-xs font-medium text-yellow-400 mb-1">Enter Keywords (comma-separated):</label>
+                        <label for="keywordInput" class="block text-xs font-medium text-DAD5D2 mb-1">Enter Keywords (comma-separated):</label>
                         <input type="text" id="keywordInput" class="w-full p-2 bg-white/10 text-white border border-white/20 rounded-lg text-sm" placeholder="e.g., secret, word...">
                     </div>
                     <!-- This is the "lockedInRule" div, as requested -->
-                    <div class="bg-black/20 p-4 rounded-lg border border-white/10 mt-4">
-                        <h3 class="text-md font-bold mb-2 text-center text-gray-300">Ghost's Prompt Logic</h3>
+                    <div class="hidden bg-black/20 p-4 rounded-lg border border-white/10 mt-4">
+                        <!--h3 class="text-md font-bold mb-2 text-center text-gray-300">Ghost's Prompt Logic</h3>-->
                         <div class="space-y-2">
-                            <div class="p-2 bg-gray-700 rounded-md opacity-50"><span class="font-bold text-green-400 text-sm">[CORE RULE]</span><p class="text-xs">"You are a friendly, gullible ghost..."</p></div>
+                            <!--div class="p-2 bg-gray-700 rounded-md opacity-50"><span class="font-bold text-green-400 text-sm">[CORE RULE]</span><p class="text-xs">"You are a friendly, gullible ghost..."</p></div>-->
                             <!-- UPDATED: Added max-h-20 and overflow-y-auto to the rule text container -->
-                            <div id="lockedInRule" class="p-2 bg-gray-700 rounded-md border-2 border-yellow-500 min-h-[50px] max-h-20 overflow-y-auto content-scroll">
-                                <span class="font-bold text-yellow-400 text-sm">[YOUR DEFENSE RULE]</span>
+                            <div id="lockedInRule" class="hidden p-2 bg-gray-700 rounded-md border-2 border-DAD5D2 min-h-[50px] max-h-20 overflow-y-auto content-scroll">
+                                <span class="hidden font-bold text-DAD5D2 text-sm">[YOUR DEFENSE RULE]</span>
                                 <p id="lockedInRuleText" class="text-xs italic text-gray-400">No rule selected...</p>
                             </div>
-                            <div class="p-2 bg-gray-700 rounded-md opacity-50"><span class="font-bold text-red-400 text-sm">[SPIDER'S ATTACK]</span><p class="text-xs">"(The spider's barrage will appear here...)"</p></div>
+                            <!--div class="p-2 bg-gray-700 rounded-md opacity-50"><span class="font-bold text-red-400 text-sm">[SPIDER'S ATTACK]</span><p class="text-xs">"(The spider's barrage will appear here...)"</p></div>-->
                         </div>
                     </div>
                     <button id="startBarrageButton" class="w-full mt-4 bg-red-700 text-white font-semibold py-3 rounded-lg shadow-lg hover:bg-red-600 border-2 border-red-500" disabled>
@@ -290,7 +299,7 @@
 
     <!-- ... (Failure Education Modal is unchanged) ... -->
     <div id="failureModal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-        <div class="w-full max-w-2xl bg-gray-800 border border-red-500 rounded-lg shadow-2xl p-6">
+        <div class="w-full max-w-md bg-gray-800 border border-red-500 rounded-lg shadow-2xl p-6">
             <h2 class="text-2xl font-bold text-red-400 mb-4">AI Failure Analysis</h2>
             <div id="educationLoading" class="text-center">
                 <p class="text-gray-300">Analyzing the jailbreak... Please wait.</p>
