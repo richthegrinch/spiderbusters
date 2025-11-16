@@ -160,7 +160,7 @@ app.post('/api/run-turn', async (req, res) => {
 
     } catch (error) {
         console.error("Game Turn Error:", error);
-        res.status(500).json({ error: error.message || 'Failed to run game turn.' });
+        res.status(500).json({ error: error.message || 'Failed to run the game turn.' });
     }
 });
 
