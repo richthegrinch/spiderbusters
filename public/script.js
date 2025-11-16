@@ -265,6 +265,7 @@ window.onload = function() {
         const allDefenseKeys = Object.keys(GAME_DATA.DEFENSES);
         const shuffled = allDefenseKeys.sort(() => 0.5 - Math.random());
         currentHand = shuffled.slice(0, 3);
+        // console.log("hi")
         renderCards(currentHand);
 
         // 🔥 Only decrement on manual swaps
