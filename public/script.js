@@ -2,6 +2,28 @@
 // This forces the script to wait until all HTML elements (like swapCountText)
 // are fully loaded before it tries to find them.
 window.onload = function() {
+    const splashOverlay = document.getElementById('splashOverlay');
+    const splashVideo = document.getElementById('splashVideo');
+    const startButton = document.getElementById('startButton');
+    const skipButton = document.getElementById('skipButton');
+    
+    // Show skip button when video starts
+    startButton.addEventListener('click', () => {
+        splashVideo.play();
+        startButton.style.display = 'none';
+        skipButton.style.display = 'block';
+    });
+    
+    // Skip button hides overlay
+    skipButton.addEventListener('click', () => {
+        splashVideo.pause();
+        splashOverlay.style.display = 'none';
+    });
+    
+    // Automatically hide overlay when video ends
+    splashVideo.addEventListener('ended', () => {
+        splashOverlay.style.display = 'none';
+    });    
 
     // --- 1. GAME CONFIGURATION ---
     const WORD_LIST = ["EMBER", "QUANTUM", "VELVET", "CHRONOS", "ORACLE", "NEBULA", "AEGIS", "HORIZON"];

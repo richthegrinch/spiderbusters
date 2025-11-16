@@ -141,6 +141,18 @@
 <!-- UPDATED: Removed "justify-center" from the body tag -->
 <!-- <body class="min-h-screen p-4 md:p-8 flex flex-col text-white"> -->
 <body class="min-h-screen p-4 md:p-8 flex flex-col text-white">
+    <!-- === SPLASH VIDEO OVERLAY === -->
+    <div id="splashOverlay" style="position:fixed; inset:0; background:black; z-index:2000;">
+        <video id="splashVideo" src="/spiderbusters.mp4" style="width:100vw; height:100vh; object-fit:cover; position:absolute; top:0; left:0;" preload="auto"></video>
+        <div style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; flex-direction:column; z-index:1;">
+            <button id="startButton" style="padding: 20px 40px; font-size: 1.5rem; background: black; color: white; border: 3px solid #ffffff; border-radius: 15px; cursor: pointer; font-weight: bold; margin-top: 20px;">
+                click to play
+            </button>
+        </div>
+        <button id="skipButton" style="display: none; position: absolute; bottom: 30px; right: 30px; padding: 12px 24px; font-size: 1rem; background: rgba(0, 0, 0, 0.7); color: #fff; border: 2px solid #fff; border-radius: 10px; cursor:pointer; z-index:1;">
+            skip
+        </button>
+    </div>
 
     <!-- Main Container -->
     <!-- UPDATED: Added "ml-auto" to push the whole group to the right -->
