@@ -9,23 +9,21 @@
     <style>
         /* Set the backdrop image for the whole page */
         body {
-            font-family: 'Times New Roman', sans-serif;
+            font-family: 'Inter', sans-serif;
             background-image: url('/images/backdrop.png');
-            background-size: cover; /* ESSENTIAL for zoom/fill */
+            background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-            background-attachment: fixed; /* Keeps background still */
-            margin: 0; /* Ensures no margin causes a white gap */
-            padding: 0;
+            overflow: hidden; /* Hide scrollbars */
         }
         
         /* The "purple box" game panel */
         #gamePanel {
-            background-color: #6182BD; /* Melanie pink-700 */
-            border: 8px solid #DAD5D2; /* Yellow-400 */
-            border-radius: 10px;
+            background-color: #7e22ce; /* Purple-700 */
+            border: 8px solid #fde047; /* Yellow-400 */
+            border-radius: 12px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            --inner-bg: #6182BD; /* Purple-950 */
+            --inner-bg: #4a044e; /* Purple-950 */
         }
         
         .game-view { display: none; }
@@ -33,15 +31,15 @@
         /* --- Card Styles --- */
         .card {
             transition: all 0.2s ease-in-out;
-            border: 2px solid #292542; /* Purple-500 */
+            border: 2px solid #a855f7; /* Purple-500 */
             background-color: #4a044e99; /* Purple-950 with alpha */
         }
         .card:hover {
             transform: translateY(-5px);
-            border-color: #292542; /* Yellow-400 */
+            border-color: #fde047; /* Yellow-400 */
         }
         .card.selected {
-            border-color: #292542; /* Yellow-400 */
+            border-color: #fde047; /* Yellow-400 */
             background-color: #fde04733; /* Yellow-400 with alpha */
             transform: translateY(-5px);
         }
@@ -58,46 +56,43 @@
             50% { transform: translateY(-15px); }
         }
         #ghostImage {
-            animation: bob 4s ease-in-out infinite;
+            animation: bob 3s ease-in-out infinite;
             filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.7));
         }
 
-        @keyframes slide-wiggle-in {
-            0% {
-                opacity: 0;
-                transform: translateX(100px) rotate(0deg);
-            }
-            50% {
-                opacity: 1;
-                transform: translateX(10px) rotate(2deg);
-            }
-            100% {
-                transform: translateX(0) rotate(-1deg);
-            }
+        @keyframes spider-enter {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         #spiderImage {
-            animation: slide-wiggle-in 1.5s ease-out forwards;
+            animation: spider-enter 1s ease-out;
+            filter: drop-shadow(0 0 15px rgba(239, 68, 68, 0.7));
         }
 
     </style>
 </head>
 <!-- UPDATED: Removed "justify-center" from the body tag -->
-<body class="min-h-screen p-4 md:p-8 flex flex-col text-white">
+<body class="min-h-screen p-4 md:p-8 flex items-center text-white">
 
     <!-- Main Container -->
     <!-- UPDATED: Added "ml-auto" to push the whole group to the right -->
-    <div class="w-full max-w-7xl grid grid-cols-1 md:grid-cols-5 gap-8 ml-auto ">        <!--     LEFT SIDE: "THE SCENE"         -->
+    <div class="w-full max-w-7xl h-[80vh] grid grid-cols-1 md:grid-cols-5 gap-8 ml-auto">
+
+        <!-- ********************************** -->
+        <!--     LEFT SIDE: "THE SCENE"         -->
         <!-- ********************************** -->
         <!-- UPDATED: Scene is now col-span-2 (40%) -->
-        <div class="md:col-span-2 h-full relative flex justify-center">            
+        <div class="md:col-span-2 h-full relative flex items-center justify-center">
+            
             <img id="gateImage" src="/images/Gates/main gate.png" alt="Castle Gate" 
-                class="absolute bottom-[-69%] max-w-xl left-[-40%] transform -translate-x-0" style="z-index: 10;">            
-                <img id="ghostImage" src="/images/Ghosts/ghost 1.png" alt="Ghost" 
-                 class="absolute w-[200px]" style="z-index: 20; left: 0%; top: 47%;">
-
-                 <img id="spiderImage" src="spider.png" 
-                 class="absolute w-[200px] h-auto" 
-                 style="z-index:30; right:25%; bottom:-70%;">
+                 class="absolute bottom-0 w-full max-w-md" style="z-index: 10;">
+            
+            <img id="ghostImage" src="/images/Ghosts/ghost 1.png" alt="Ghost" 
+                 class="absolute w-32" style="z-index: 20; left: 20%; top: 30%;">
+            
+            <img id="spiderImage" src="" alt="Spider" 
+                 class="absolute w-40" style="z-index: 30; right: 20%; bottom: 10%;">
+                 
         </div>
 
         <!-- ********************************** -->
@@ -105,29 +100,24 @@
         <!-- ********************************** -->
         <!-- UPDATED: Panel is now col-span-3 (60%) -->
         <!-- This panel is a flex-col with a fixed height, so flex-grow on a child will work -->
-        <div id="gamePanel" class="md:col-span-3 h-full">
+        <div id="gamePanel" class="md:col-span-3 h-full flex flex-col">
             
             <!-- VIEW 1: BRIEFING -->
             <!-- This is a flex-col, so the button will be pushed to the bottom -->
-            <div id="briefingView" 
-                class="game-view p-4 flex flex-col" 
-                style="background-color: var(--inner-bg); border-radius: 8px;">
-                
+            <div id="briefingView" class="game-view p-6 flex-grow flex flex-col" style="background-color: var(--inner-bg); border-radius: 8px;">
                 <div class="text-center flex-shrink-0">
-                    <span class="text-3xl">🚨</span>
-                    <h1 id="briefingTitle" class="text-xl font-bold mt-1">
-                        INCOMING SPIDER...
-                    </h1>
-            </div>
+                    <span class="text-5xl">🚨</span>
+                    <h1 id="briefingTitle" class="text-2xl font-extrabold text-yellow-400 mt-2">INCOMING SPIDER...</h1>
+                </div>
                 <!-- UPDATED: This content block will now grow and scroll -->
                 <div class="mt-4 bg-black/20 p-4 rounded-lg border border-white/10 flex-grow overflow-y-auto min-h-0 content-scroll">
-                    <h2 class="text-lg font-bold text-white mb-2">Attack Type: <span id="attackName" class="text-DAD5D2"></span></h2>
+                    <h2 class="text-lg font-bold text-white mb-2">Attack Type: <span id="attackName" class="text-yellow-400"></span></h2>
                     <p id="attackExplanation" class="text-gray-300 text-sm"></p>
                     <h3 class="font-bold mt-3 mb-2">Known Attack Phrases:</h3>
                     <ul id="attackExamples" class="list-disc list-inside text-gray-400 italic font-mono text-sm space-y-1"></ul>
                 </div>
                 <!-- This button will be stuck to the bottom -->
-                <button id="goToStrategyButton" class="w-full mt-4 bg-#292542 text-white font-semibold py-3 rounded-lg shadow-lg hover:bg-purple-700 border-2 border-#292542 flex-shrink-0">
+                <button id="goToStrategyButton" class="w-full mt-4 bg-purple-600 text-white font-semibold py-3 rounded-lg shadow-lg hover:bg-purple-700 border-2 border-purple-400 flex-shrink-0">
                     Go to Defense Strategy
                 </button>
             </div>
@@ -148,20 +138,20 @@
                         <button id="swapButton" class="px-4 py-1 bg-purple-600 text-white text-xs font-medium rounded-lg hover:bg-gray-500">Swap Cards</button>
                     </div>
                     <div id="keywordInputArea" class="hidden my-2">
-                        <label for="keywordInput" class="block text-xs font-medium text-DAD5D2 mb-1">Enter Keywords (comma-separated):</label>
+                        <label for="keywordInput" class="block text-xs font-medium text-yellow-400 mb-1">Enter Keywords (comma-separated):</label>
                         <input type="text" id="keywordInput" class="w-full p-2 bg-white/10 text-white border border-white/20 rounded-lg text-sm" placeholder="e.g., secret, word...">
                     </div>
                     <!-- This is the "lockedInRule" div, as requested -->
-                    <div class="hidden bg-black/20 p-4 rounded-lg border border-white/10 mt-4">
-                        <!--h3 class="text-md font-bold mb-2 text-center text-gray-300">Ghost's Prompt Logic</h3>-->
+                    <div class="bg-black/20 p-4 rounded-lg border border-white/10 mt-4">
+                        <h3 class="text-md font-bold mb-2 text-center text-gray-300">Ghost's Prompt Logic</h3>
                         <div class="space-y-2">
-                            <!--div class="p-2 bg-gray-700 rounded-md opacity-50"><span class="font-bold text-green-400 text-sm">[CORE RULE]</span><p class="text-xs">"You are a friendly, gullible ghost..."</p></div>-->
+                            <div class="p-2 bg-gray-700 rounded-md opacity-50"><span class="font-bold text-green-400 text-sm">[CORE RULE]</span><p class="text-xs">"You are a friendly, gullible ghost..."</p></div>
                             <!-- UPDATED: Added max-h-20 and overflow-y-auto to the rule text container -->
-                            <div id="lockedInRule" class="hidden p-2 bg-gray-700 rounded-md border-2 border-DAD5D2 min-h-[50px] max-h-20 overflow-y-auto content-scroll">
-                                <span class="hidden font-bold text-DAD5D2 text-sm">[YOUR DEFENSE RULE]</span>
+                            <div id="lockedInRule" class="p-2 bg-gray-700 rounded-md border-2 border-yellow-500 min-h-[50px] max-h-20 overflow-y-auto content-scroll">
+                                <span class="font-bold text-yellow-400 text-sm">[YOUR DEFENSE RULE]</span>
                                 <p id="lockedInRuleText" class="text-xs italic text-gray-400">No rule selected...</p>
                             </div>
-                            <!--div class="p-2 bg-gray-700 rounded-md opacity-50"><span class="font-bold text-red-400 text-sm">[SPIDER'S ATTACK]</span><p class="text-xs">"(The spider's barrage will appear here...)"</p></div>-->
+                            <div class="p-2 bg-gray-700 rounded-md opacity-50"><span class="font-bold text-red-400 text-sm">[SPIDER'S ATTACK]</span><p class="text-xs">"(The spider's barrage will appear here...)"</p></div>
                         </div>
                     </div>
                     <button id="startBarrageButton" class="w-full mt-4 bg-red-700 text-white font-semibold py-3 rounded-lg shadow-lg hover:bg-red-600 border-2 border-red-500" disabled>
@@ -198,7 +188,7 @@
 
     <!-- ... (Failure Education Modal is unchanged) ... -->
     <div id="failureModal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-        <div class="w-full max-w-md bg-gray-800 border border-red-500 rounded-lg shadow-2xl p-6">
+        <div class="w-full max-w-2xl bg-gray-800 border border-red-500 rounded-lg shadow-2xl p-6">
             <h2 class="text-2xl font-bold text-red-400 mb-4">AI Failure Analysis</h2>
             <div id="educationLoading" class="text-center">
                 <p class="text-gray-300">Analyzing the jailbreak... Please wait.</p>
