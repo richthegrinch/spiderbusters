@@ -11,10 +11,12 @@
         body {
             font-family: 'Times New Roman', sans-serif;
             background-image: url('/images/backdrop.png');
-            background-size: cover;
+            background-size: cover; /* ESSENTIAL for zoom/fill */
             background-position: center;
             background-repeat: no-repeat;
-            overflow: hidden; /* Hide scrollbars */
+            background-attachment: fixed; /* Keeps background still */
+            margin: 0; /* Ensures no margin causes a white gap */
+            padding: 0;
         }
         
         /* The "purple box" game panel */
@@ -56,43 +58,48 @@
             50% { transform: translateY(-15px); }
         }
         #ghostImage {
-            animation: bob 3s ease-in-out infinite;
+            animation: bob 4s ease-in-out infinite;
             filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.7));
         }
 
-        @keyframes spider-enter {
-            from { opacity: 0; transform: translateY(50px); }
-            to { opacity: 1; transform: translateY(0); }
+        @keyframes slide-wiggle-in {
+            0% {
+                opacity: 0;
+                transform: translateX(100px) rotate(0deg);
+            }
+            50% {
+                opacity: 1;
+                transform: translateX(10px) rotate(2deg);
+            }
+            100% {
+                transform: translateX(0) rotate(-1deg);
+            }
         }
         #spiderImage {
-            animation: spider-enter 1s ease-out;
-            filter: drop-shadow(0 0 15px rgba(239, 68, 68, 0.7));
+            animation: slide-wiggle-in 1.5s ease-out forwards;
         }
 
     </style>
 </head>
 <!-- UPDATED: Removed "justify-center" from the body tag -->
-<body class="min-h-screen p-4 md:p-8 flex items-center text-white">
+<body class="min-h-screen p-4 md:p-8 flex flex-col text-white">
 
     <!-- Main Container -->
     <!-- UPDATED: Added "ml-auto" to push the whole group to the right -->
-    <div class="w-full max-w-7xl h-[80vh] grid grid-cols-1 md:grid-cols-5 gap-8 ml-auto">
-
-        <!-- ********************************** -->
-        <!--     LEFT SIDE: "THE SCENE"         -->
+    <div class="w-full max-w-7xl grid grid-cols-1 md:grid-cols-5 gap-8 ml-auto flex-grow">        <!--     LEFT SIDE: "THE SCENE"         -->
         <!-- ********************************** -->
         <!-- UPDATED: Scene is now col-span-2 (40%) -->
-        <div class="md:col-span-2 h-full relative flex items-center justify-center">
-            
+        <div class="md:col-span-2 h-full relative flex justify-center">            
             <img id="gateImage" src="/images/Gates/main gate.png" alt="Castle Gate" 
-                 class="absolute bottom-0 w-full max-w-md" style="z-index: 10;">
+                class="absolute bottom-[5%] max-w-xl left-[-40%] transform -translate-x-0" style="z-index: 10;">            
+                <img id="ghostImage" src="/images/Ghosts/ghost 1.png" alt="Ghost" 
+                 class="absolute w-[200px]" style="z-index: 20; left: 0%; top: 30%;">
+
+                 <img id="spiderImage" src="spider.png" 
+                 class="absolute w-[200px] h-auto" 
+                 style="z-index:30; right:20%; bottom:10%;">
             
-            <img id="ghostImage" src="/images/Ghosts/ghost 1.png" alt="Ghost" 
-                 class="absolute w-32" style="z-index: 20; left: 20%; top: 30%;">
-            
-            <img id="spiderImage" src="" alt="Spider" 
-                 class="absolute w-40" style="z-index: 30; right: 20%; bottom: 10%;">
-                 
+
         </div>
 
         <!-- ********************************** -->
@@ -196,7 +203,7 @@
             </div>
             <div id="educationContent" class_content="hidden">
                 <p id="educationText" class="text-gray-200 whitespace-pre-wrap"></p>
-                <button id="closeModalButton" class_content="w-full bg-purple-600 text-white font-bold py-3 rounded-lg hover:bg-purple-500 transition-all mt-6">
+                <button id="closeModalButton" class="w-full bg-purple-600 text-white font-bold py-3 rounded-lg hover:bg-purple-500 transition-all mt-6">
                     Got it
                 </button>
             </div>
@@ -205,5 +212,39 @@
     
     <!-- This script tag MUST be here at the end -->
     <script src="/script.js"></script>
+    <!-- Modal HTML structure (you already have this part) -->
+
+<script>
+    // Get the modal element and the close button
+    const modal = document.getElementById("failureModal");
+    const closeButton = document.getElementById("closeModalButton");
+
+    // Function to show the modal (remove hidden class)
+    function showModal() {
+        modal.classList.remove("hidden");  // Show the modal
+    }
+
+    // Function to close the modal (add hidden class)
+    function closeModal() {
+        modal.classList.add("hidden");  // Hide the modal
+    }
+
+    // Attach event listener to close button to hide the modal
+    closeButton.addEventListener("click", closeModal);
+
+    // Close the modal if the user clicks on the backdrop (outside the modal)
+    modal.addEventListener("click", function(event) {
+        if (event.target === modal) {  // If the backdrop (the area outside the modal content) is clicked
+            closeModal();
+        }
+    });
+
+    // Example: show the modal after a timeout (this could be triggered by your own logic)
+    // setTimeout(() => {
+    //     showModal();  // This will display the modal after 2 seconds for demonstration purposes
+    // }, 2000);
+</script>
+
+
 </body>
 </html>
