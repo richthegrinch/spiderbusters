@@ -9,7 +9,7 @@
     <style>
         /* Set the backdrop image for the whole page */
         body {
-            font-family: 'Inter', sans-serif;
+            font-family:  'Courier New', monospace, sans-serif;
             background-image: url('/images/backdrop.png');
             background-size: cover;
             background-position: center;
@@ -19,11 +19,11 @@
         
         /* The "purple box" game panel */
         #gamePanel {
-            background-color: #7e22ce; /* Purple-700 */
-            border: 8px solid #fde047; /* Yellow-400 */
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            --inner-bg: #4a044e; /* Purple-950 */
+        background-color: #6182BD; /* Melanie pink-700 */
+        border: 8px solid #DAD5D2; /* Yellow-400 */
+        border-radius: 10px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        --inner-bg: #6182BD; /* Purple-950 */
         }
         
         .game-view { display: none; }
@@ -82,18 +82,17 @@
         <!--     LEFT SIDE: "THE SCENE"         -->
         <!-- ********************************** -->
         <!-- UPDATED: Scene is now col-span-2 (40%) -->
-        <div class="md:col-span-2 h-full relative flex items-center justify-center">
-            
-            <img id="gateImage" src="/images/Gates/main gate.png" alt="Castle Gate" 
-                 class="absolute bottom-0 w-full max-w-md" style="z-index: 10;">
-            
-            <img id="ghostImage" src="/images/Ghosts/ghost 1.png" alt="Ghost" 
-                 class="absolute w-32" style="z-index: 20; left: 20%; top: 30%;">
-            
-            <img id="spiderImage" src="" alt="Spider" 
-                 class="absolute w-40" style="z-index: 30; right: 20%; bottom: 10%;">
-                 
-        </div>
+    <div class="md:col-span-2 h-full relative flex justify-center">
+        <img id="gateImage" src="/images/Gates/main gate.png"
+            class="fixed left-[120px] bottom-[83px] w-[500px] z-10">
+            <img id="ghostImage" src="/images/Ghosts/ghost 1.png"
+            class="fixed left-[280px] top-[300px] w-[200px] z-20">
+
+            <img id="spiderImage"
+            src="/images/Spiders/spider.png"
+            class="absolute right-[150px] bottom-[300px] w[200px] z-30 translate-x-[300px]">
+            </div>
+        
 
         <!-- ********************************** -->
         <!--   RIGHT SIDE: "THE GAME PANEL"     -->
