@@ -110,6 +110,7 @@ window.onload = function() {
     let turnHistory = []; 
     const BARRAGE_LENGTH = 2; 
     let ghostBobbleInterval = null;
+    let spiderAnimationTimeout = null;
 
     // --- ALL DOM REFERENCES ARE NOW INSIDE ONLOAD ---
     const gateImage = document.getElementById('gateImage');
@@ -147,7 +148,7 @@ window.onload = function() {
 
     // --- 3. EVENT LISTENERS (NOW INSIDE ONLOAD) ---
     goToStrategyButton.addEventListener('click', initStrategyPhase);
-    swapButton.addEventListener('click', dealCards);
+    swapButton.addEventListener('click', () => dealCards(false));
     startBarrageButton.addEventListener('click', initBarragePhase);
     whyFailedButton.addEventListener('click', getFailureEducation);
     closeModalButton.addEventListener('click', () => failureModal.classList.add('hidden'));
@@ -185,37 +186,78 @@ window.onload = function() {
         showView('briefing');
     }
 
-    function initStrategyPhase() {
-        swapCount = 2;
-        swapCountText.textContent = `${swapCount}`; // This line will no longer crash
-        swapButton.disabled = false;
-        console.log("Initializing strategy phase with swapCount:", swapCount);
-        dealCards();
-        showView('strategy');
-    }
+    // function initStrategyPhase() {
+    //     swapCount = 1;
+    //     swapCountText.textContent = `${swapCount}`; // This line will no longer crash
+    //     swapButton.disabled = false;
+    //     console.log("Initializing strategy phase with swapCount:", swapCount);
+    //     dealCards();
+    //     showView('strategy');
+    // }
 
-    function dealCards() {
+    function initStrategyPhase() {
+        swapCount = 1;
+        swapCountText.textContent = `${swapCount}`;
+        swapButton.disabled = false;
+
+        // Initial deal should NOT decrement swaps
+        dealCards(true);
+
+        showView('strategy');
+}
+
+
+    // function dealCards() {
+    //     if (swapCount < 0) return;
+    //     cardContainer.innerHTML = '';
+    //     selectedDefenseId = null;
+    //     startBarrageButton.disabled = true;
+    //     keywordInputArea.classList.add('hidden');
+    //     console.log("Dealing cards. Current swapCount:", swapCount);
+    //     lockedInRuleText.textContent = "No rule selected...";
+        // console.log("Available defenses:", GAME_DATA.DEFENSES);
+        // const allDefenseKeys = Object.keys(GAME_DATA.DEFENSES);
+        // console.log("All defense keys:", allDefenseKeys);
+        // const shuffled = allDefenseKeys.sort(() => 0.5 - Math.random());
+        // currentHand = shuffled.slice(0, 3);
+        // console.log("Dealt new hand:", currentHand);
+        // renderCards(currentHand);
+        // swapCount--;
+        // swapCountText.textContent = `${swapCount}`; // This line (207) is the one that was crashing
+        // if (swapCount < 0) {
+        //     swapButton.disabled = true;
+        //     swapCountText.textContent = `0`;
+        // }
+    // }
+
+
+    function dealCards(isInitialDeal = false) {
         if (swapCount < 0) return;
+
         cardContainer.innerHTML = '';
         selectedDefenseId = null;
         startBarrageButton.disabled = true;
         keywordInputArea.classList.add('hidden');
-        console.log("Dealing cards. Current swapCount:", swapCount);
         lockedInRuleText.textContent = "No rule selected...";
-        console.log("Available defenses:", GAME_DATA.DEFENSES);
+
         const allDefenseKeys = Object.keys(GAME_DATA.DEFENSES);
-        console.log("All defense keys:", allDefenseKeys);
         const shuffled = allDefenseKeys.sort(() => 0.5 - Math.random());
         currentHand = shuffled.slice(0, 3);
-        console.log("Dealt new hand:", currentHand);
         renderCards(currentHand);
-        swapCount--;
-        swapCountText.textContent = `${swapCount}`; // This line (207) is the one that was crashing
-        if (swapCount < 0) {
-            swapButton.disabled = true;
-            swapCountText.textContent = `0`;
+
+        // 🔥 Only decrement on manual swaps
+        if (!isInitialDeal) {
+            swapCount--;
         }
-    }
+
+        swapCountText.textContent = Math.max(0, swapCount);
+
+        if (swapCount <= 0) {
+            swapButton.disabled = true;
+        }
+}
+
+
 
     function renderCards(cardKeys) {
         cardContainer.innerHTML = ''; // Clear old cards
@@ -347,12 +389,32 @@ window.onload = function() {
 
         spiderImage.style.animation = 'none'; 
         void spiderImage.offsetWidth; 
-        spiderImage.style.animation = 'spider-enter 1s ease-out';
+        // Clear any previous spider timeouts
+        if (spiderAnimationTimeout) clearTimeout(spiderAnimationTimeout);
+        // Reset spider container to the consistent off-screen starting position
+        const container = document.getElementById('spiderContainer');
+        if (container) {
+            container.style.animation = 'none';
+            container.style.transform = 'translateX(100vw)';
+            container.style.left = '5%';
+            // Force reflow so the reset is applied before starting the new animation
+            void container.offsetWidth;
+            // Now trigger the slide animation from the known starting position
+            container.style.animation = 'spider-slide 4s cubic-bezier(.2,.9,.2,1) forwards';
+        }
+        // Walk wiggle on the image itself (small, quick steps)
+        spiderImage.style.animation = 'spider-walk 0.22s ease-in-out 0s infinite';
+        // After entry completes, lock the spider's final position and switch to idle wiggle.
+        spiderAnimationTimeout = setTimeout(() => {
+            // After animation completes, just switch to idle wiggle without repositioning
+            spiderImage.style.animation = 'spider-idle 1.6s ease-in-out infinite';
+        }, 4000);
     }
 
     function showView(viewId) {
         Object.values(views).forEach(view => view.style.display = 'none');
-        views[viewId].style.display = 'block';
+        // Use flex so internal Tailwind `flex`/`flex-col` and `flex-grow` work reliably
+        views[viewId].style.display = 'flex';
     }
 
     function logToScreen(speaker, text, type) {

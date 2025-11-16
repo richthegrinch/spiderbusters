@@ -7,16 +7,35 @@
     <!-- Load Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* Set the backdrop image for the whole page */
+        /* Ensure root fills viewport and set the backdrop image for the whole page */
+        html { height: 100%; }
+
+        /* Allow the page to scroll when content extends past the viewport.
+           Use a fixed pseudo-element for the backdrop so it never scales with
+           page height (some browsers handle `background-attachment: fixed`
+           inconsistently when the body grows). */
         body {
             font-family: 'Times New Roman', sans-serif;
-            background-image: url('/images/backdrop.png');
-            background-size: cover; /* ESSENTIAL for zoom/fill */
-            background-position: center;
-            background-repeat: no-repeat;
-            background-attachment: fixed; /* Keeps background still */
             margin: 0; /* Ensures no margin causes a white gap */
             padding: 0;
+            height: 100vh; /* lock body to the viewport height so the page never scrolls */
+            overflow: hidden; /* no page scrolling; game panel scrolls internally */
+            position: relative;
+            background: none; /* backdrop is rendered via the fixed pseudo-element */
+        }
+
+        /* Fixed backdrop layer that always fills the viewport and stays
+           visually locked even when page content grows. */
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background-image: url('/images/backdrop.png');
+            background-size: contain; /* show the whole image without cropping */
+            background-position: center center;
+            background-repeat: no-repeat;
+            z-index: -10;
+            pointer-events: none;
         }
         
         /* The "purple box" game panel */
@@ -26,9 +45,24 @@
             border-radius: 10px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
             --inner-bg: #6182BD; /* Purple-950 */
+            overflow: hidden;
+            display: flex; /* make panel a flex column so inner views can grow */
+            flex-direction: column;
+            height: auto; /* let it grow naturally */
+            max-height: 70vh; /* expand up to this before internal scrolls kick in */
+        }
+
+        /* Clip the left scene so its absolutely positioned art doesn't expand the document */
+        #leftScene {
+            height: 100%;
+            overflow: hidden;
+            position: relative;
         }
         
-        .game-view { display: none; }
+        .game-view { 
+            display: none; 
+            min-height: 0; 
+        }
         
         /* --- Card Styles --- */
         .card {
@@ -75,29 +109,72 @@
                 transform: translateX(0) rotate(-1deg);
             }
         }
-        #spiderImage {
-            animation: slide-wiggle-in 1.5s ease-out forwards;
+        /* Spider entry: travel from right edge to gate area with a wiggle */
+        @keyframes spider-slide {
+            /* small incremental horizontal moves (use translateX on container) */
+            0%   { transform: translateX(100vw); opacity: 0; }
+            10%  { transform: translateX(92vw); opacity: 1; }
+            20%  { transform: translateX(84vw); }
+            30%  { transform: translateX(76vw); }
+            40%  { transform: translateX(68vw); }
+            50%  { transform: translateX(60vw); }
+            60%  { transform: translateX(52vw); }
+            70%  { transform: translateX(44vw); }
+            80%  { transform: translateX(36vw); }
+            88%  { transform: translateX(12vw); }
+            100% { transform: translateX(12vw); }
         }
+
+        /* fast small rotations to simulate walking/crab-steps (on the image itself) */
+        @keyframes spider-walk {
+            0% { transform: rotate(-8deg); }
+            50% { transform: rotate(8deg); }
+            100% { transform: rotate(-8deg); }
+        }
+
+        /* subtle idle wiggle after arrival */
+        @keyframes spider-idle {
+            0% { transform: rotate(-4deg); }
+            50% { transform: rotate(4deg); }
+            100% { transform: rotate(-4deg); }
+        }
+
+        /* spider container starts off-screen (translateX) and slides to 0 */
+        #spiderContainer { will-change: transform; }
+
+        /* the image rotates; this transform will not interfere with container translate */
+        #spiderImage { display: block; }
 
     </style>
 </head>
 <!-- UPDATED: Removed "justify-center" from the body tag -->
+<!-- <body class="min-h-screen p-4 md:p-8 flex flex-col text-white"> -->
 <body class="min-h-screen p-4 md:p-8 flex flex-col text-white">
 
     <!-- Main Container -->
     <!-- UPDATED: Added "ml-auto" to push the whole group to the right -->
-    <div class="w-full max-w-7xl grid grid-cols-1 md:grid-cols-5 gap-8 ml-auto ">        <!--     LEFT SIDE: "THE SCENE"         -->
+    <div class="w-full max-w-7xl grid grid-cols-1 md:grid-cols-5 gap-8 ml-auto">
         <!-- ********************************** -->
         <!-- UPDATED: Scene is now col-span-2 (40%) -->
-        <div class="md:col-span-2 h-full relative flex justify-center">            
-            <img id="gateImage" src="/images/Gates/main gate.png" alt="Castle Gate" 
-                class="absolute bottom-[-69%] max-w-xl left-[-40%] transform -translate-x-0" style="z-index: 10;">            
-                <img id="ghostImage" src="/images/Ghosts/ghost 1.png" alt="Ghost" 
-                 class="absolute w-[200px]" style="z-index: 20; left: 0%; top: 47%;">
+        <div id="leftScene" class="md:col-span-2 relative flex justify-center">            
+            <!-- Gate sits in its own layer so transforms won't affect characters -->
+            <div id="gateWrapper" class="relative z-10">
+                <img id="gateImage" src="/images/Gates/main gate.png" alt="Castle Gate" 
+                    class="max-w-xl" style="position:fixed; bottom:10px; left:5%; z-index:10;">
+            </div>
 
-                 <img id="spiderImage" src="spider.png" 
-                 class="absolute w-[200px] h-auto" 
-                 style="z-index:30; right:25%; bottom:-70%;">
+            <!-- Characters are in a separate absolute layer so they don't move with the gate -->
+            <div id="characterLayer" class="absolute inset-0 z-20 pointer-events-none">
+                <img id="ghostImage" src="/images/Ghosts/ghost 1.png" alt="Ghost" 
+                    class="w-[350px]" style="position:fixed; z-index:20; left:11%; top:32%; transform:translateX(-50%);">
+
+                <!-- Spider container: container handles horizontal slide, inner centers image -->
+                <div id="spiderContainer" style="position:fixed; left:5%; bottom:40px; z-index:60; transform: translateX(100vw);">
+                    <div class="spiderInner" style="position:relative; left:50%; transform:translateX(-50%);">
+                        <img id="spiderImage" src="/images/Spiders/spider.png" class="w-[200px] h-auto" style="display:block;">
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- ********************************** -->
@@ -105,11 +182,11 @@
         <!-- ********************************** -->
         <!-- UPDATED: Panel is now col-span-3 (60%) -->
         <!-- This panel is a flex-col with a fixed height, so flex-grow on a child will work -->
-        <div id="gamePanel" class="md:col-span-3 h-full">
+        <div id="gamePanel" class="md:col-span-3">
             
             <!-- VIEW 1: BRIEFING -->
             <!-- This is a flex-col, so the button will be pushed to the bottom -->
-            <div id="briefingView" 
+            <!-- <div id="briefingView" 
                 class="game-view p-4 flex flex-col" 
                 style="background-color: var(--inner-bg); border-radius: 8px;">
                 
@@ -119,18 +196,42 @@
                         INCOMING SPIDER...
                     </h1>
             </div>
-                <!-- UPDATED: This content block will now grow and scroll -->
-                <div class="mt-4 bg-black/20 p-4 rounded-lg border border-white/10 flex-grow overflow-y-auto min-h-0 content-scroll">
+                UPDATED: This content block will now grow and scroll -->
+                <!-- <div class="mt-4 bg-black/20 p-4 rounded-lg border border-white/10 flex-grow overflow-y-auto min-h-0 content-scroll">
                     <h2 class="text-lg font-bold text-white mb-2">Attack Type: <span id="attackName" class="text-DAD5D2"></span></h2>
                     <p id="attackExplanation" class="text-gray-300 text-sm"></p>
                     <h3 class="font-bold mt-3 mb-2">Known Attack Phrases:</h3>
                     <ul id="attackExamples" class="list-disc list-inside text-gray-400 italic font-mono text-sm space-y-1"></ul>
-                </div>
+                </div> -->
                 <!-- This button will be stuck to the bottom -->
-                <button id="goToStrategyButton" class="w-full mt-4 bg-#292542 text-white font-semibold py-3 rounded-lg shadow-lg hover:bg-purple-700 border-2 border-#292542 flex-shrink-0">
+                <!-- <button id="goToStrategyButton" class="w-full mt-4 bg-#292542 text-white font-semibold py-3 rounded-lg shadow-lg hover:bg-purple-700 border-2 border-#292542 flex-shrink-0">
                     Go to Defense Strategy
                 </button>
-            </div>
+            </div> -->
+
+            <div id="briefingView" class="game-view p-4 flex flex-col" style="background-color: var(--inner-bg); border-radius: 8px;">
+    
+    <div class="text-center flex-shrink-0">
+        <span class="text-3xl">🚨</span>
+        <h1 id="briefingTitle" class="text-xl font-bold mt-1">
+            INCOMING SPIDER...
+        </h1>
+    </div>
+
+    <!-- THIS IS THE SCROLLABLE CONTENT -->
+    <div class="mt-4 bg-black/20 p-4 rounded-lg border border-white/10 flex-grow overflow-y-auto min-h-0 content-scroll">
+        <h2 class="text-lg font-bold text-white mb-2">Attack Type: <span id="attackName" class="text-DAD5D2"></span></h2>
+        <p id="attackExplanation" class="text-gray-300 text-sm"></p>
+        <h3 class="font-bold mt-3 mb-2">Known Attack Phrases:</h3>
+        <ul id="attackExamples" class="list-disc list-inside text-gray-400 italic font-mono text-sm space-y-1"></ul>
+    </div>
+
+    <!-- Button at the bottom -->
+    <button id="goToStrategyButton" class="w-full mt-4 bg-#292542 text-white font-semibold py-3 rounded-lg shadow-lg hover:bg-purple-700 border-2 border-#292542 flex-shrink-0">
+        Go to Defense Strategy
+    </button>
+</div>
+
 
             <!-- VIEW 2: STRATEGY -->
             <!-- UPDATED: This is now a flex-col, and the card container scrolls -->
