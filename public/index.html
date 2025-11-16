@@ -76,23 +76,21 @@
 
     <!-- Main Container -->
     <!-- UPDATED: Added "ml-auto" to push the whole group to the right -->
-    <div class="w-full max-w-7xl h-[80vh] grid grid-cols-1 md:grid-cols-5 gap-8 ml-auto">
-
-        <!-- ********************************** -->
-        <!--     LEFT SIDE: "THE SCENE"         -->
+    <div class="w-full max-w-7xl grid grid-cols-1 md:grid-cols-5 gap-8 ml-auto flex-grow">        <!--     LEFT SIDE: "THE SCENE"         -->
         <!-- ********************************** -->
         <!-- UPDATED: Scene is now col-span-2 (40%) -->
-    <div class="md:col-span-2 h-full relative flex justify-center">
-        <img id="gateImage" src="/images/Gates/main gate.png"
-            class="fixed left-[120px] bottom-[83px] w-[500px] z-10">
-            <img id="ghostImage" src="/images/Ghosts/ghost 1.png"
-            class="fixed left-[280px] top-[300px] w-[200px] z-20">
+        <div class="md:col-span-2 h-full relative flex justify-center">            
+            <img id="gateImage" src="/images/Gates/main gate.png" alt="Castle Gate" 
+                class="absolute bottom-[5%] max-w-xl left-[-40%] transform -translate-x-0" style="z-index: 10;">            
+                <img id="ghostImage" src="/images/Ghosts/ghost 1.png" alt="Ghost" 
+                 class="absolute w-[200px]" style="z-index: 20; left: 0%; top: 30%;">
 
-            <img id="spiderImage"
-            src="/images/Spiders/spider.png"
-            class="absolute right-[150px] bottom-[300px] w[200px] z-30 translate-x-[300px]">
-            </div>
-        
+                 <img id="spiderImage" src="spider.png" 
+                 class="absolute w-[200px] h-auto" 
+                 style="z-index:30; right:20%; bottom:10%;">
+            
+
+        </div>
 
         <!-- ********************************** -->
         <!--   RIGHT SIDE: "THE GAME PANEL"     -->
@@ -106,7 +104,7 @@
             <div id="briefingView" class="game-view p-6 flex-grow flex flex-col" style="background-color: var(--inner-bg); border-radius: 8px;">
                 <div class="text-center flex-shrink-0">
                     <span class="text-5xl">🚨</span>
-                    <h1 id="briefingTitle" class="text-2xl font-extrabold text-yellow-400 mt-2">INCOMING SPIDER...</h1>
+                    <h1 id="briefingTitle" class="text-2xl font-extrabold text-#DAD5D2 mt-2">INCOMING SPIDER...</h1>
                 </div>
                 <!-- UPDATED: This content block will now grow and scroll -->
                 <div class="mt-4 bg-black/20 p-4 rounded-lg border border-white/10 flex-grow overflow-y-auto min-h-0 content-scroll">
