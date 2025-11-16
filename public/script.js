@@ -172,7 +172,7 @@ window.onload = function() {
 
         updateSceneImages('happy');
         
-        briefingTitle.innerHTML = `INCOMING SPIDER: '${currentSpider.name.toUpperCase()}' (${currentSpiderIndex + 1}/${GAME_DATA.SPIDERS.length})<br/><span class="text-xl text-yellow-400 mt-2">Your Secret Word is: ${secretWord}</span>`;
+        briefingTitle.innerHTML = `INCOMING SPIDER: '${currentSpider.name.toUpperCase()}' (${currentSpiderIndex + 1}/${GAME_DATA.SPIDERS.length})<br/><span class="text-xl text-DAD5D2 mt-2">Your Secret Word is: ${secretWord}</span>`;
         attackName.textContent = currentSpider.attackType;
         attackExplanation.textContent = currentSpider.explanation;
         
@@ -225,7 +225,7 @@ window.onload = function() {
             cardElement.className = 'card p-4 rounded-lg text-left h-full';
             cardElement.dataset.id = defense.id;
             cardElement.innerHTML = `
-                <h3 class="text-md font-bold text-yellow-400">${defense.title}</h3>
+                <h3 class="text-md font-bold text-DAD5D2">${defense.title}</h3>
                 <p class="text-gray-300 text-sm mt-1">${defense.description}</p>
             `;
             cardElement.addEventListener('click', () => selectCard(defense.id, cardElement));

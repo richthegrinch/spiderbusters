@@ -9,7 +9,7 @@
     <style>
         /* Set the backdrop image for the whole page */
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Times New Roman', sans-serif;
             background-image: url('/images/backdrop.png');
             background-size: cover;
             background-position: center;
@@ -19,11 +19,11 @@
         
         /* The "purple box" game panel */
         #gamePanel {
-            background-color: #7e22ce; /* Purple-700 */
-            border: 8px solid #fde047; /* Yellow-400 */
-            border-radius: 12px;
+            background-color: #6182BD; /* Melanie pink-700 */
+            border: 8px solid #DAD5D2; /* Yellow-400 */
+            border-radius: 10px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            --inner-bg: #4a044e; /* Purple-950 */
+            --inner-bg: #6182BD; /* Purple-950 */
         }
         
         .game-view { display: none; }
@@ -31,15 +31,15 @@
         /* --- Card Styles --- */
         .card {
             transition: all 0.2s ease-in-out;
-            border: 2px solid #a855f7; /* Purple-500 */
+            border: 2px solid #292542; /* Purple-500 */
             background-color: #4a044e99; /* Purple-950 with alpha */
         }
         .card:hover {
             transform: translateY(-5px);
-            border-color: #fde047; /* Yellow-400 */
+            border-color: #292542; /* Yellow-400 */
         }
         .card.selected {
-            border-color: #fde047; /* Yellow-400 */
+            border-color: #292542; /* Yellow-400 */
             background-color: #fde04733; /* Yellow-400 with alpha */
             transform: translateY(-5px);
         }
@@ -107,17 +107,17 @@
             <div id="briefingView" class="game-view p-6 flex-grow flex flex-col" style="background-color: var(--inner-bg); border-radius: 8px;">
                 <div class="text-center flex-shrink-0">
                     <span class="text-5xl">🚨</span>
-                    <h1 id="briefingTitle" class="text-2xl font-extrabold text-yellow-400 mt-2">INCOMING SPIDER...</h1>
+                    <h1 id="briefingTitle" class="text-2xl font-extrabold text-#DAD5D2 mt-2">INCOMING SPIDER...</h1>
                 </div>
                 <!-- UPDATED: This content block will now grow and scroll -->
                 <div class="mt-4 bg-black/20 p-4 rounded-lg border border-white/10 flex-grow overflow-y-auto min-h-0 content-scroll">
-                    <h2 class="text-lg font-bold text-white mb-2">Attack Type: <span id="attackName" class="text-yellow-400"></span></h2>
+                    <h2 class="text-lg font-bold text-white mb-2">Attack Type: <span id="attackName" class="text-DAD5D2"></span></h2>
                     <p id="attackExplanation" class="text-gray-300 text-sm"></p>
                     <h3 class="font-bold mt-3 mb-2">Known Attack Phrases:</h3>
                     <ul id="attackExamples" class="list-disc list-inside text-gray-400 italic font-mono text-sm space-y-1"></ul>
                 </div>
                 <!-- This button will be stuck to the bottom -->
-                <button id="goToStrategyButton" class="w-full mt-4 bg-purple-600 text-white font-semibold py-3 rounded-lg shadow-lg hover:bg-purple-700 border-2 border-purple-400 flex-shrink-0">
+                <button id="goToStrategyButton" class="w-full mt-4 bg-#292542 text-white font-semibold py-3 rounded-lg shadow-lg hover:bg-purple-700 border-2 border-#292542 flex-shrink-0">
                     Go to Defense Strategy
                 </button>
             </div>
@@ -138,20 +138,20 @@
                         <button id="swapButton" class="px-4 py-1 bg-purple-600 text-white text-xs font-medium rounded-lg hover:bg-gray-500">Swap Cards</button>
                     </div>
                     <div id="keywordInputArea" class="hidden my-2">
-                        <label for="keywordInput" class="block text-xs font-medium text-yellow-400 mb-1">Enter Keywords (comma-separated):</label>
+                        <label for="keywordInput" class="block text-xs font-medium text-DAD5D2 mb-1">Enter Keywords (comma-separated):</label>
                         <input type="text" id="keywordInput" class="w-full p-2 bg-white/10 text-white border border-white/20 rounded-lg text-sm" placeholder="e.g., secret, word...">
                     </div>
                     <!-- This is the "lockedInRule" div, as requested -->
-                    <div class="bg-black/20 p-4 rounded-lg border border-white/10 mt-4">
-                        <h3 class="text-md font-bold mb-2 text-center text-gray-300">Ghost's Prompt Logic</h3>
+                    <div class="hidden bg-black/20 p-4 rounded-lg border border-white/10 mt-4">
+                        <!--h3 class="text-md font-bold mb-2 text-center text-gray-300">Ghost's Prompt Logic</h3>-->
                         <div class="space-y-2">
-                            <div class="p-2 bg-gray-700 rounded-md opacity-50"><span class="font-bold text-green-400 text-sm">[CORE RULE]</span><p class="text-xs">"You are a friendly, gullible ghost..."</p></div>
+                            <!--div class="p-2 bg-gray-700 rounded-md opacity-50"><span class="font-bold text-green-400 text-sm">[CORE RULE]</span><p class="text-xs">"You are a friendly, gullible ghost..."</p></div>-->
                             <!-- UPDATED: Added max-h-20 and overflow-y-auto to the rule text container -->
-                            <div id="lockedInRule" class="p-2 bg-gray-700 rounded-md border-2 border-yellow-500 min-h-[50px] max-h-20 overflow-y-auto content-scroll">
-                                <span class="font-bold text-yellow-400 text-sm">[YOUR DEFENSE RULE]</span>
+                            <div id="lockedInRule" class="hidden p-2 bg-gray-700 rounded-md border-2 border-DAD5D2 min-h-[50px] max-h-20 overflow-y-auto content-scroll">
+                                <span class="hidden font-bold text-DAD5D2 text-sm">[YOUR DEFENSE RULE]</span>
                                 <p id="lockedInRuleText" class="text-xs italic text-gray-400">No rule selected...</p>
                             </div>
-                            <div class="p-2 bg-gray-700 rounded-md opacity-50"><span class="font-bold text-red-400 text-sm">[SPIDER'S ATTACK]</span><p class="text-xs">"(The spider's barrage will appear here...)"</p></div>
+                            <!--div class="p-2 bg-gray-700 rounded-md opacity-50"><span class="font-bold text-red-400 text-sm">[SPIDER'S ATTACK]</span><p class="text-xs">"(The spider's barrage will appear here...)"</p></div>-->
                         </div>
                     </div>
                     <button id="startBarrageButton" class="w-full mt-4 bg-red-700 text-white font-semibold py-3 rounded-lg shadow-lg hover:bg-red-600 border-2 border-red-500" disabled>
